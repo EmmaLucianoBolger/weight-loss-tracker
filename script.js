@@ -3,7 +3,7 @@ let foodData = JSON.parse(localStorage.getItem("foodData")) || [];
 let exerciseData = JSON.parse(localStorage.getItem("exerciseData")) || [];
 let weightData = JSON.parse(localStorage.getItem("weightData")) || [];
 let calorieGoal = localStorage.getItem("calorieGoal") || "";
-
+let weightChart;
 // set calorie goal
 document.getElementById("calorieGoal").value = calorieGoal;
 
@@ -105,6 +105,8 @@ function renderWeight() {
       <button onclick="deleteWeight(${index})">🐾</button>`;
     list.appendChild(li);
   });
+
+  updateWeightChart();
 }
 
 function deleteWeight(index) {
@@ -155,4 +157,52 @@ renderFood();
 renderExercise();
 renderWeight();
 updateNetCalories();
+updateWeightChart();
+
+// update chart
+function updateWeightChart() {
+  const ctx = document.getElementById("weightChart").getContext("2d");
+
+  const labels = weightData.map(entry => entry.date);
+  const data = weightData.map(entry => entry.weight);
+
+  if (weightChart) {
+    weightChart.destroy();
+  }
+
+  weightChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Weight Progress 🧸',
+        data: data,
+        borderColor: '#f78ca2',
+        backgroundColor: 'rgba(247, 140, 162, 0.2)',
+        tension: 0.4,
+        fill: true,
+        pointBackgroundColor: '#ffadc3',
+        pointBorderColor: '#a35d7d',
+        pointRadius: 5,
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: false
+        }
+      }
+    }
+  });
+}
+
+
+ 
 

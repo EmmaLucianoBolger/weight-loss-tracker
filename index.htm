@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TeddyFit Tracker 🐻</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <div class="container">
     <!--change the emoji to img-->
     <h1>🐻 TeddyFit Tracker</h1>
     <div class="tracker">
-      
+
       <!-- exersise and food tracking-->
       <div class="section" id="calorie-section">
         <h2>🍽️ Food & Exercise</h2>
@@ -45,13 +47,14 @@
         <input type="number" id="weightInput" placeholder="Enter weight (kg)" />
         <button onclick="addWeight()">Add Weight</button>
         <ul id="weightList"></ul>
+        <canvas id="weightChart" style="margin-top: 1rem;"></canvas>
       </div>
 
     </div>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
 </body>
+
 </html>
-
-
-
