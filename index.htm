@@ -16,19 +16,19 @@
 
       <!-- exersise and food tracking-->
       <div class="section" id="calorie-section">
-        <h2>🍽️ Food & Exercise</h2>
-        <label>Calorie Goal: <input type="number" id="calorieGoal" placeholder="e.g. 2000" /></label>
+        <h2>🍽️ Food & Exercise</h2> <!--change this symbol-->
+        <label> You're Calorie Goal: <input type="number" id="calorieGoal" placeholder="e.g. 1500" /></label>
 
-        <h3>What you ate:</h3>
-        <input type="text" id="foodName" placeholder="Food name" />
+        <h3>What Did You Eat Today?</h3>
+        <input type="text" id="foodName" placeholder="Food Name" />
         <input type="number" id="foodCalories" placeholder="Calories" />
         <button onclick="addFood()">Add Food</button>
 
         <ul id="foodList"></ul>
 
-        <h3>Exercise done:</h3>
-        <input type="text" id="exerciseName" placeholder="Exercise name" />
-        <input type="number" id="exerciseCalories" placeholder="Calories burned" />
+        <h3>What Exercise Did You Do Today?</h3>
+        <input type="text" id="exerciseName" placeholder="Exercise Name" />
+        <input type="number" id="exerciseCalories" placeholder="Calories Burned" />
         <button onclick="addExercise()">Add Exercise</button>
 
         <ul id="exerciseList"></ul>
@@ -43,8 +43,8 @@
 
       <!--weight tracker-->
       <div class="section" id="weight-section">
-        <h2>⚖️ Weight Tracker</h2>
-        <input type="number" id="weightInput" placeholder="Enter weight (kg)" />
+        <h2>⚖️ Weight Tracker</h2> <!--change this symbol-->
+        <input type="number" id="weightInput" placeholder="Enter Weight (kg)" />
         <button onclick="addWeight()">Add Weight</button>
         <ul id="weightList"></ul>
         <canvas id="weightChart" style="margin-top: 1rem;"></canvas>
