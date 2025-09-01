@@ -20,31 +20,31 @@
         <label> You're Calorie Goal: <input type="number" id="calorieGoal" placeholder="e.g. 1500" /></label>
 
         <h3>What Did You Eat Today?</h3>
-        <input type="text" id="foodName" placeholder="Food Name" />
-        <input type="number" id="foodCalories" placeholder="Calories" />
+        <input type="text" id="foodName" placeholder="What Food?" />
+        <input type="number" id="foodCalories" placeholder="How Many Cals" />
         <button onclick="addFood()">Add Food</button>
 
         <ul id="foodList"></ul>
 
-        <h3>What Exercise Did You Do Today?</h3>
-        <input type="text" id="exerciseName" placeholder="Exercise Name" />
-        <input type="number" id="exerciseCalories" placeholder="Calories Burned" />
+        <h3>Did You Excersise Today?</h3>
+        <input type="text" id="exerciseName" placeholder="What Excersie" />
+        <input type="number" id="exerciseCalories" placeholder="How Msny Cals Burned?" />
         <button onclick="addExercise()">Add Exercise</button>
 
         <ul id="exerciseList"></ul>
 
-        <button onclick="resetLogs()">Reset Today’s Log</button>
+        <button onclick="resetLogs()">Reset Today’s Entry</button>
 
 
         <h3>Result:</h3>
         <p id="netCalories">Net Calories: 0</p>
-        <p id="calorieMessage">You're doing great! 🧸</p>
+        <p id="calorieMessage">You Can Do It! 🧸</p>
       </div>
 
       <!--weight tracker-->
       <div class="section" id="weight-section">
         <h2>⚖️ Weight Tracker</h2> <!--change this symbol-->
-        <input type="number" id="weightInput" placeholder="Enter Weight (kg)" />
+        <input type="number" id="weightInput" placeholder="Enter Your Weight (kg)" />
         <button onclick="addWeight()">Add Weight</button>
         <ul id="weightList"></ul>
         <canvas id="weightChart" style="margin-top: 1rem;"></canvas>
@@ -56,5 +56,6 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
 </body>
+<!--should add more notes of encouragement to the user-->
 
 </html>
