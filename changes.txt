@@ -1,9 +1,22 @@
 Things to change:
+- fix typo's
+- add a design to the chart
+- overlay graph
+- fix storage issues
 
 
 
 Things to add:
-
-
+- step counter // connect to a health app
+- a history section 
+- projections // estimate future weight based on current trands
+- macro breakdowns
+- custom goals section 
+- streaks and achievements 
+- progress milestones 
+- food suggestions 
+- exercise recommendations
+- recipy tab with homemade healthy recipies 
 
 things to take away:
+
