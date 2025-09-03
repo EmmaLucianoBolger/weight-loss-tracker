@@ -21,18 +21,21 @@
         </label>
 
         <h3>What Did You Eat Today?</h3>
-        <input type="text" id="foodName" placeholder="What Food?" />
-        <input type="number" id="foodCalories" placeholder="How Many Cals" />
-        <button id="addFoodBtn" class="btn">Add Food</button>
+        <input type="text" id="foodName" placeholder="Food Name" />
+        <input type="number" id="foodCalories" placeholder="Calories" />
+        <button onclick="addFood()">Add Food</button>
+
         <ul id="foodList"></ul>
 
-        <h3>Did You Exercise Today?</h3>
-        <input type="text" id="exerciseName" placeholder="What Exercise?" />
-        <input type="number" id="exerciseCalories" placeholder="How Many Cals Burned?" />
-        <button id="addExerciseBtn" class="btn">Add Exercise</button>
+        <h3>What Exercise Did You Do Today?</h3>
+        <input type="text" id="exerciseName" placeholder="Exercise Name" />
+        <input type="number" id="exerciseCalories" placeholder="Calories Burned" />
+        <button onclick="addExercise()">Add Exercise</button>
+
         <ul id="exerciseList"></ul>
 
-        <button id="resetBtn" class="btn">Reset Today’s Entry</button>
+        <button onclick="resetLogs()">Reset Today’s Log</button>
+
 
         <h3>Result:</h3>
         <p id="netCalories">Net Calories: 0</p>
@@ -41,24 +44,9 @@
 
       <!-- Weight Tracker Section -->
       <div class="section" id="weight-section">
-        <h2>⚖️ Weight Tracker</h2>
-
-        <input type="number" id="weightInput" placeholder="Enter Your Weight (kg)" />
-        <button id="addWeightBtn" class="btn">Add Weight</button>
-
-        <label style="display:block; margin-bottom:0.5rem; margin-top:1rem;">
-          🎯 Goal Weight:
-          <input type="number" id="goalWeightInput" placeholder="Enter your goal weight (kg)" min="0" step="0.1" style="
-            width: 100%;
-            padding: 0.6rem;
-            margin-top: 0.25rem;
-            border-radius: 10px;
-            border: 2px solid #d8a05e;
-            font-family:'Comic Sans MS', cursive;
-            font-size:1rem;
-          " />
-        </label>
-
+        <h2>⚖️ Weight Tracker</h2> <!--change this symbol-->
+        <input type="number" id="weightInput" placeholder="Enter Weight (kg)" />
+        <button onclick="addWeight()">Add Weight</button>
         <ul id="weightList"></ul>
         <canvas id="weightChart" style="margin-top: 1rem;"></canvas>
       </div>
@@ -69,5 +57,6 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
 </body>
+<!--should add more notes of encouragement to the user-->
 
 </html>
