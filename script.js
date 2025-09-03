@@ -289,8 +289,8 @@ function deleteWeight(index) {
 function updateWeightChart() {
   const ctx = document.getElementById("weightChart").getContext("2d");
 
-  const labels = weightData.map(entry => entry.date);
-  const data =  weightData.map(entry => entry.weight);
+  const labels = weightData.map(entry => entry.date); // use dates on x-axis
+  const data = weightData.map(entry => entry.weight); // weights on y-axis
 
   if (weightChart) weightChart.destroy();
 
@@ -342,6 +342,7 @@ function updateWeightChart() {
   });
 }
 
+
 // ---------------- Weight Streak Tracker ---------------- //
 
 function calculateStreak() {
@@ -378,7 +379,3 @@ renderFood();
 renderExercise();
 renderWeight();
 updateNetCalories();
-
-
- 
-
