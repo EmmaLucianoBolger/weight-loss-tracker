@@ -1,26 +1,63 @@
-// Load data from LocalStorage
+// ---------------- Global Variables ---------------- //
+
 let foodData = JSON.parse(localStorage.getItem("foodData")) || [];
 let exerciseData = JSON.parse(localStorage.getItem("exerciseData")) || [];
 let weightData = JSON.parse(localStorage.getItem("weightData")) || [];
 let calorieGoal = localStorage.getItem("calorieGoal") || "";
+let goalWeight = localStorage.getItem("goalWeight") || "";
 let weightChart;
-// set calorie goal
-document.getElementById("calorieGoal").value = calorieGoal;
 
-// Save all data to LocalStorage
+// Set initial values
+document.getElementById("calorieGoal").value = calorieGoal;
+document.getElementById("goalWeightInput").value = goalWeight;
+
+// ---------------- Event Listeners ---------------- //
+
+document.getElementById("addFoodBtn").addEventListener("click", addFood);
+document.getElementById("addExerciseBtn").addEventListener("click", addExercise);
+document.getElementById("addWeightBtn").addEventListener("click", addWeight);
+document.getElementById("resetBtn").addEventListener("click", resetLogs);
+
+["foodCalories", "exerciseCalories", "weightInput"].forEach(id => {
+  document.getElementById(id).addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      if (id === "foodCalories") addFood();
+      if (id === "exerciseCalories") addExercise();
+      if (id === "weightInput") addWeight();
+    }
+  });
+});
+
+// Calorie goal input
+document.getElementById("calorieGoal").addEventListener("input", function () {
+  calorieGoal = this.value;
+  localStorage.setItem("calorieGoal", calorieGoal);
+  updateNetCalories();
+});
+
+// Goal weight input
+document.getElementById("goalWeightInput").addEventListener("input", function() {
+  goalWeight = this.value;
+  localStorage.setItem("goalWeight", goalWeight);
+  updateWeightChart();
+});
+
+// ---------------- Save / Load ---------------- //
+
 function saveData() {
   localStorage.setItem("foodData", JSON.stringify(foodData));
   localStorage.setItem("exerciseData", JSON.stringify(exerciseData));
   localStorage.setItem("weightData", JSON.stringify(weightData));
   localStorage.setItem("calorieGoal", calorieGoal);
+  localStorage.setItem("goalWeight", goalWeight);
 }
 
-// food
+// ---------------- Food Section ---------------- //
+
 function addFood() {
   const name = document.getElementById("foodName").value.trim();
   const calories = parseInt(document.getElementById("foodCalories").value);
-
-  if (!name || isNaN(calories)) return;
+  if (!name || isNaN(calories) || calories < 0) return;
 
   foodData.push({ name, calories });
   saveData();
@@ -34,11 +71,41 @@ function addFood() {
 function renderFood() {
   const list = document.getElementById("foodList");
   list.innerHTML = "";
+
   foodData.forEach((item, index) => {
     const li = document.createElement("li");
-    li.innerHTML = `${item.name} - ${item.calories} cal 
-      <button onclick="deleteFood(${index})">🐾</button>`;
+    li.style.background = "#fff8f2";
+    li.style.border = "2px solid #a35d7d";
+    li.style.borderRadius = "12px";
+    li.style.padding = "0.5rem 1rem";
+    li.style.marginBottom = "0.5rem";
+    li.style.display = "flex";
+    li.style.justifyContent = "space-between";
+    li.style.alignItems = "center";
+    li.style.color = "#a35d7d";
+    li.style.fontFamily = "'Comic Sans MS', cursive";
+
+    li.innerHTML = `
+      <span>${item.name} - ${item.calories} cal</span>
+      <button class="deleteFoodBtn" data-index="${index}" style="
+        background-color:#f78ca2;
+        border:none;
+        border-radius:50%;
+        width:28px;
+        height:28px;
+        cursor:pointer;
+        color:white;
+        font-size:1rem;
+      ">🐾</button>
+    `;
     list.appendChild(li);
+  });
+
+  document.querySelectorAll(".deleteFoodBtn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const idx = e.currentTarget.getAttribute("data-index");
+      deleteFood(parseInt(idx));
+    });
   });
 }
 
@@ -49,12 +116,12 @@ function deleteFood(index) {
   updateNetCalories();
 }
 
-//exercise
+// ---------------- Exercise Section ---------------- //
+
 function addExercise() {
   const name = document.getElementById("exerciseName").value.trim();
   const calories = parseInt(document.getElementById("exerciseCalories").value);
-
-  if (!name || isNaN(calories)) return;
+  if (!name || isNaN(calories) || calories < 0) return;
 
   exerciseData.push({ name, calories });
   saveData();
@@ -68,11 +135,41 @@ function addExercise() {
 function renderExercise() {
   const list = document.getElementById("exerciseList");
   list.innerHTML = "";
+
   exerciseData.forEach((item, index) => {
     const li = document.createElement("li");
-    li.innerHTML = `${item.name} - ${item.calories} cal burned 
-      <button onclick="deleteExercise(${index})">🐾</button>`;
+    li.style.background = "#fff8f2";
+    li.style.border = "2px solid #a35d7d";
+    li.style.borderRadius = "12px";
+    li.style.padding = "0.5rem 1rem";
+    li.style.marginBottom = "0.5rem";
+    li.style.display = "flex";
+    li.style.justifyContent = "space-between";
+    li.style.alignItems = "center";
+    li.style.color = "#a35d7d";
+    li.style.fontFamily = "'Comic Sans MS', cursive";
+
+    li.innerHTML = `
+      <span>${item.name} - ${item.calories} cal burned</span>
+      <button class="deleteExerciseBtn" data-index="${index}" style="
+        background-color:#f78ca2;
+        border:none;
+        border-radius:50%;
+        width:28px;
+        height:28px;
+        cursor:pointer;
+        color:white;
+        font-size:1rem;
+      ">🐾</button>
+    `;
     list.appendChild(li);
+  });
+
+  document.querySelectorAll(".deleteExerciseBtn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const idx = e.currentTarget.getAttribute("data-index");
+      deleteExercise(parseInt(idx));
+    });
   });
 }
 
@@ -83,66 +180,35 @@ function deleteExercise(index) {
   updateNetCalories();
 }
 
-// weight
-function addWeight() {
-  const weight = parseFloat(document.getElementById("weightInput").value);
-  if (isNaN(weight)) return;
+// ---------------- Net Calories & Encouragement ---------------- //
 
-  const date = new Date().toLocaleDateString();
-  weightData.push({ date, weight });
-  saveData();
-  renderWeight();
-
-  document.getElementById("weightInput").value = "";
-}
-
-function renderWeight() {
-  const list = document.getElementById("weightList");
-  list.innerHTML = "";
-  weightData.forEach((entry, index) => {
-    const li = document.createElement("li");
-    li.innerHTML = `${entry.date} - ${entry.weight} kg 
-      <button onclick="deleteWeight(${index})">🐾</button>`;
-    list.appendChild(li);
-  });
-
-  updateWeightChart();
-}
-
-function deleteWeight(index) {
-  weightData.splice(index, 1);
-  saveData();
-  renderWeight();
-}
-
-// calorie goal
-document.getElementById("calorieGoal").addEventListener("input", function () {
-  calorieGoal = this.value;
-  saveData();
-  updateNetCalories();
-});
-
-// net calories
 function updateNetCalories() {
   const totalIn = foodData.reduce((sum, item) => sum + item.calories, 0);
   const totalOut = exerciseData.reduce((sum, item) => sum + item.calories, 0);
   const net = totalIn - totalOut;
 
   document.getElementById("netCalories").textContent = `Net Calories: ${net}`;
-  const msg = document.getElementById("calorieMessage");
+  updateEncouragement();
+}
 
-  if (!calorieGoal || isNaN(calorieGoal)) {
+function updateEncouragement() {
+  const msg = document.getElementById("calorieMessage");
+  const net = foodData.reduce((sum, item) => sum + item.calories, 0) - 
+              exerciseData.reduce((sum, item) => sum + item.calories, 0);
+
+  if (!calorieGoal) {
     msg.textContent = "Set a goal to get started! 🧸";
-  } else if (net < calorieGoal) {
-    msg.textContent = `${calorieGoal - net} calories under goal 🐻`;
-  } else if (net === parseInt(calorieGoal)) {
-    msg.textContent = "Right on target! 🎯";
+  } else if (net < calorieGoal * 0.8) {
+    msg.textContent = "Amazing job! You’re under your goal today! 🌟";
+  } else if (net <= calorieGoal) {
+    msg.textContent = "Right on target! Keep it up! 🐻";
   } else {
-    msg.textContent = `${net - calorieGoal} calories over goal 🐻`;
+    msg.textContent = "Don't worry, tomorrow is a new chance! 🧸";
   }
 }
 
-// reset
+// ---------------- Reset ---------------- //
+
 function resetLogs() {
   foodData = [];
   exerciseData = [];
@@ -152,56 +218,166 @@ function resetLogs() {
   updateNetCalories();
 }
 
-// 
-renderFood();
-renderExercise();
-renderWeight();
-updateNetCalories();
-updateWeightChart();
+// ---------------- Weight Section ---------------- //
 
-// update chart
+function addWeight() {
+  const weightInput = document.getElementById("weightInput");
+  const weight = parseFloat(weightInput.value);
+  if (isNaN(weight) || weight <= 0) return;
+
+  const date = new Date().toLocaleDateString();
+  weightData.push({ date, weight });
+  saveData();
+  renderWeight();
+
+  weightInput.value = "";
+}
+
+function renderWeight() {
+  const list = document.getElementById("weightList");
+  list.innerHTML = "";
+
+  weightData.forEach((entry, index) => {
+    const li = document.createElement("li");
+    li.style.background = "#fff8f2";
+    li.style.border = "2px solid #a35d7d";
+    li.style.borderRadius = "12px";
+    li.style.padding = "0.5rem 1rem";
+    li.style.marginBottom = "0.5rem";
+    li.style.display = "flex";
+    li.style.justifyContent = "space-between";
+    li.style.alignItems = "center";
+    li.style.color = "#a35d7d";
+    li.style.fontFamily = "'Comic Sans MS', cursive";
+
+    li.innerHTML = `
+      <span>${entry.date} - ${entry.weight} kg</span>
+      <button class="deleteWeightBtn" data-index="${index}" style="
+        background-color:#f78ca2;
+        border:none;
+        border-radius:50%;
+        width:28px;
+        height:28px;
+        cursor:pointer;
+        color:white;
+        font-size:1rem;
+      ">🐾</button>
+    `;
+
+    list.appendChild(li);
+  });
+
+  document.querySelectorAll(".deleteWeightBtn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const idx = e.currentTarget.getAttribute("data-index");
+      deleteWeight(parseInt(idx));
+    });
+  });
+
+  updateWeightChart();
+  displayStreak();
+}
+
+function deleteWeight(index) {
+  weightData.splice(index, 1);
+  saveData();
+  renderWeight();
+}
+
+// ---------------- Weight Chart ---------------- //
+
 function updateWeightChart() {
   const ctx = document.getElementById("weightChart").getContext("2d");
 
   const labels = weightData.map(entry => entry.date);
-  const data = weightData.map(entry => entry.weight);
+  const data =  weightData.map(entry => entry.weight);
 
-  if (weightChart) {
-    weightChart.destroy();
+  if (weightChart) weightChart.destroy();
+
+  const datasets = [
+    {
+      label: 'Weight Progress 🧸',
+      data: data,
+      borderColor: '#f78ca2',
+      backgroundColor: 'rgba(247, 140, 162, 0.2)',
+      tension: 0.4,
+      fill: true,
+      pointBackgroundColor: '#ffe4ec',
+      pointBorderColor: '#a35d7d',
+      pointRadius: 6,
+      borderWidth: 3
+    }
+  ];
+
+  if (goalWeight && !isNaN(goalWeight)) {
+    datasets.push({
+      label: 'Goal Weight 🎯',
+      data: new Array(labels.length).fill(goalWeight),
+      borderColor: '#f9d89c',
+      borderDash: [6,6],
+      borderWidth: 2,
+      pointRadius: 0,
+      fill: false
+    });
   }
 
   weightChart = new Chart(ctx, {
     type: 'line',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: 'Weight Progress 🧸',
-        data: data,
-        borderColor: '#f78ca2',
-        backgroundColor: 'rgba(247, 140, 162, 0.2)',
-        tension: 0.4,
-        fill: true,
-        pointBackgroundColor: '#ffadc3',
-        pointBorderColor: '#a35d7d',
-        pointRadius: 5,
-        borderWidth: 2
-      }]
-    },
+    data: { labels, datasets },
     options: {
       responsive: true,
       plugins: {
         legend: {
-          display: false
+          labels: {
+            color: '#a35d7d',
+            font: { family: "'Comic Sans MS', cursive" }
+          }
         }
       },
       scales: {
-        y: {
-          beginAtZero: false
-        }
+        x: { ticks: { color: '#a35d7d' }, grid: { color: '#fff8f2' } },
+        y: { ticks: { color: '#a35d7d' }, grid: { color: '#fff8f2' }, beginAtZero: false }
       }
     }
   });
 }
+
+// ---------------- Weight Streak Tracker ---------------- //
+
+function calculateStreak() {
+  if (!weightData.length) return 0;
+  let streak = 1;
+
+  for (let i = weightData.length - 1; i > 0; i--) {
+    const prevDate = new Date(weightData[i-1].date);
+    const currDate = new Date(weightData[i].date);
+    const diff = (currDate - prevDate) / (1000*60*60*24);
+    if (diff === 1) streak++;
+    else break;
+  }
+  return streak;
+}
+
+function displayStreak() {
+  let streakMsg = document.getElementById("streakMessage");
+  if (!streakMsg) {
+    streakMsg = document.createElement("p");
+    streakMsg.id = "streakMessage";
+    streakMsg.style.fontFamily = "'Comic Sans MS', cursive";
+    streakMsg.style.color = "#a35d7d";
+    streakMsg.style.marginTop = "0.5rem";
+    document.getElementById("weight-section").appendChild(streakMsg);
+  }
+  const streak = calculateStreak();
+  streakMsg.textContent = `🔥 Current Weight Logging Streak: ${streak} day${streak > 1 ? 's' : ''}!`;
+}
+
+// ---------------- Initial Render ---------------- //
+
+renderFood();
+renderExercise();
+renderWeight();
+updateNetCalories();
 
 
  
