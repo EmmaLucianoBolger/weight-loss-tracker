@@ -17,6 +17,27 @@ Things to add:
 - food suggestions 
 - exercise recommendations
 - recipy tab with homemade healthy recipies 
+- should be a gallery for personal progress photo
 
-things to take away:
+need somewhere for everything so that it isn't being saved locally
+- there should be a login page for the user to be able to be abe to transfer their data from one device to another one.
 
+so lets say i 
+weigh 70
+hieght 180
+and i walk at a slow steady pace for 30mins 
+how many calories would i burn
+
+
+lets say we add a questionaire and say someone answers:
+gender = female
+height = 160cm
+weight = 75
+lets say then the program outputs that that person is overweight and for example the suggested person needs to lose 5kg to be considered a healthy weight. my tracker should automatically add this info into the weight tracker.
+then when they go to the website and they want to add food and lets say its chicken and lets say they ate 100g then the program should automatically know how many calories are in that much chicken and should be able to be adjusted based on how much they have. when it comes to exercise based on weight and height the program should be able to work out how many calories approx they would lose it should all be personalised to the user.
+
+
+
+
+note: 
+i'm not going to be able to get this exact so i should i make a discalaimer noting that everything is an approx value
